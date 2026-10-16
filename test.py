@@ -149,6 +149,7 @@ check(not os.path.exists(d + "-typo"), "a missing MEMORY_DIR was created")
 # prints the paste block, and is idempotent
 fresh = {k: v for k, v in os.environ.items() if k != "MEMORY_DIR"}
 fresh["HOME"] = tempfile.mkdtemp()
+fresh["USERPROFILE"] = fresh["HOME"]  # Windows expands ~ from USERPROFILE
 noenv = subprocess.run(memo + ["wake"], capture_output=True, text=True, env=fresh)
 check(noenv.returncode == 1 and "memo init" in noenv.stderr,
       "with no MEMORY_DIR and no memory, wake must point at init")
@@ -166,7 +167,8 @@ check(woke.returncode == 0 and "You are awake." in woke.stdout,
 # Every command the tool prints must RUN on the machine it printed it on.
 # `curl | sh` puts nothing on PATH, so a bare `memo nap ...` would not: the
 # whole loop (note -> merge prompt -> nap) dies on `command not found`.
-bare = dict(fresh, PATH="/usr/bin:/bin")
+bare = dict(fresh, PATH=os.path.join(os.environ["SystemRoot"], "System32")
+            if os.name == "nt" else "/usr/bin:/bin")
 subprocess.run(memo + ["note", "the first thing that happened"], env=bare,
                capture_output=True)
 asked = subprocess.run(memo + ["note", "the second thing that happened"],
@@ -178,6 +180,20 @@ obeyed = subprocess.run(order[0].replace('"<your line>"', '"both things"'),
 check(obeyed.returncode == 0 and "saved" in obeyed.stdout,
       "the order the tool printed does not run with nothing on PATH: %r -> %s"
       % (order[0], obeyed.stderr.strip()))
+
+# On Windows a backslashed path runs in no agent shell: a shim on PATH earns
+# a bare `memo`, and without one the interpreter is named, slashes forward.
+shim = tempfile.mkdtemp()
+fake = os.path.join(shim, "memo")
+check(cli.invocation(fake, shim, r"C:\Py\python.exe", True)
+      == "C:/Py/python.exe " + os.path.abspath(fake).replace("\\", "/"),
+      "a PATH entry without a memo.cmd shim earned a bare memo")
+open(os.path.join(shim, "memo.cmd"), "w").close()
+check(cli.invocation(fake, os.pathsep.join(["", "x", shim]), "py", True) == "memo",
+      "a shim on PATH did not earn a bare memo")
+check(cli.invocation(fake, "", r"C:\Program Files\py.exe", True)
+      .startswith('"C:/Program Files/py.exe" '), "a path with spaces is unquoted")
+shutil.rmtree(shim)
 
 # a size written by hand into `config` must not brick the tool with a
 # recovery that is itself broken: name the file and the line
@@ -196,7 +212,7 @@ open(badcfg, "w").write("")
 r_ = subprocess.run(memo + ["init"], capture_output=True, text=True,
                     env=dict(fresh, MEMORY_DIR=MEMO))   # a file, not a store
 check(r_.returncode == 1 and "Traceback" not in r_.stderr
-      and "Not a directory" in r_.stderr,
+      and ("Not a directory" in r_.stderr or os.name == "nt"),
       "a filesystem error printed a traceback: " + r_.stderr)
 
 
@@ -272,7 +288,7 @@ lines = [l for p in parts for l in p]
 check(len(lines) == WAKE_LINES, "woke with %d lines, want %d" % (len(lines), WAKE_LINES))
 check(lines[-1].startswith("#%d " % (N - 1)), "newest memory not last / not raw")
 check(lines[0].startswith("#0-"), "oldest line should be a summary block")
-check(re.search(r"Run: \S*memo wake 2", run("wake").stdout),
+check(re.search(r"Run: .*memo wake 2", run("wake").stdout),
       "part 1 must ORDER the next command, not label it")
 check("You are awake." in run("wake", str(len(parts))).stdout,
       "last part must say it is last")
@@ -507,12 +523,13 @@ check(r.returncode == 1 and "forget 0-1" in r.stderr
 
 # an unreadable level is a filesystem failure and must surface as one --
 # reading it as "not compressed yet" offers work that cannot be done
-os.chmod(os.path.join(d3, "TREE", "2"), 0)
-r_ = subprocess.run(memo + ["wake"], capture_output=True, text=True,
-                    env=dict(os.environ, MEMORY_DIR=d3))
-check(r_.returncode == 1 and "Permission denied" in r_.stderr
-      and "not compressed" not in r_.stdout,
-      "an unreadable level was read as pending work: " + r_.stdout + r_.stderr)
+if os.name != "nt":    # Windows chmod cannot revoke read access
+    os.chmod(os.path.join(d3, "TREE", "2"), 0)
+    r_ = subprocess.run(memo + ["wake"], capture_output=True, text=True,
+                        env=dict(os.environ, MEMORY_DIR=d3))
+    check(r_.returncode == 1 and "Permission denied" in r_.stderr
+          and "not compressed" not in r_.stdout,
+          "an unreadable level was read as pending work: " + r_.stdout + r_.stderr)
 os.chmod(os.path.join(d3, "TREE", "2"), 0o644)
 
 # an impossible calendar date would poison every later import: the store's

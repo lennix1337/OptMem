@@ -42,7 +42,26 @@ def pretty(p):
 
 # Every command this tool prints has to RUN. After `curl | sh` nothing is on
 # PATH, so a bare `memo nap 0-1 "..."` would not: the tool names itself.
-ME = pretty(__file__)
+def invocation(script, path, exe, windows):
+    """How an agent's shell runs this tool. On Windows a backslashed path runs
+    in no shell an agent uses: bash eats the backslashes, PowerShell opens the
+    extensionless file as a document. A `memo.cmd` shim on PATH makes a bare
+    `memo` work in bash, cmd and PowerShell alike; without one, name the
+    interpreter, with forward slashes, which all three accept."""
+    if not windows:
+        return pretty(script)
+    here = os.path.normcase(os.path.dirname(os.path.abspath(script)))
+    if os.path.exists(os.path.join(here, "memo.cmd")) and any(
+            os.path.normcase(os.path.abspath(os.path.expanduser(p))) == here
+            for p in path.split(os.pathsep) if p):
+        return "memo"
+    q = lambda p: '"%s"' % p if " " in p else p
+    return "%s %s" % (q(exe.replace("\\", "/")),
+                      q(os.path.abspath(script).replace("\\", "/")))
+
+
+ME = invocation(__file__, os.environ.get("PATH", ""), sys.executable,
+                os.name == "nt")
 
 # The sizes a memory may override in its own `config` file: the default, and
 # what it means. `memo config` shows and edits them. The globals below start
