@@ -1,11 +1,41 @@
+<p align="center"><img src="assets/banner.svg" alt="OptMem: permanent memory for AI agents, one Rust binary" width="100%"></p>
+
+<p align="center"><a href="https://github.com/lennix1337/OptMem/actions/workflows/ci.yml"><img src="https://github.com/lennix1337/OptMem/actions/workflows/ci.yml/badge.svg" alt="ci"></a></p>
+
 # OptMem
 
 Permanent memory for AI agents. A short prompt, one small binary, plug and play.
 
 A Rust port of [VictorTaelin/OptMem](https://github.com/VictorTaelin/OptMem).
-It reads and writes the same files, so an existing memory needs no migration.
+It reads and writes the same files, so an existing memory needs no migration:
+swap the Python script for the binary and your agents wake up as before.
 
-![how OptMem works](anim/optmem.gif)
+## What this fork adds
+
+| | Python original | this fork |
+|---|---|---|
+| Runtime | Python 3 + a `memo.cmd`/`memo.ps1` shim on Windows | one static binary, `memo` / `memo.exe` |
+| Platforms tested | Linux, macOS (its suite crashes on Windows) | Linux, Windows, macOS (CI on each push) |
+| Notes with `"`, `%`, `^`, `&` | mangled by cmd/PowerShell quoting | `memo note -` reads stdin, byte-exact |
+| Commands it prints | interpreter + backslashed path on Windows | bare `memo` once it is on `PATH` |
+| Wake after a bulk import or `forget` | refuses until every summary exists | wakes, marks the gaps, hands the work over |
+| Pending compressions | one per command | independent ones batched, up to 4 per `nap` |
+| Wrong memories | stay wrong | `memo amend <id>` marks the original as corrected |
+| Facts that must never fade | squeezed into old summaries | `memo pin`, always at the top of wake |
+| Summary lines | `#0-63 ...` | `#0-63 [2026-10-05..10-09] ...` |
+| Repeats | up to the agent | exact repeats of the last 200 refused, near repeats flagged |
+| `recall` | one regex | several (all must match), `--around N`, a `zoom` hint |
+| Lock on Windows | "30 s" that is really ~12 min, then a traceback | 30 s, then a clear message |
+
+Measured on 100,000 memories (Windows, single runs):
+
+| | Python | Rust |
+|---|---|---|
+| `import` 100k | 465 ms | 117 ms |
+| `recall` | 148 ms | 68 ms |
+| `note` | 57 ms | 44 ms |
+| `zoom` | 53 ms | 38 ms |
+| `wake` | 47 ms | 38 ms |
 
 ## Install
 
@@ -54,6 +84,17 @@ What the tool does for you:
 - Parallel sessions queue on one lock for up to 30 seconds, then fail with a
   clear message.
 
+## How it works
+
+Every note is one line in an append-only log. Pairs of lines fold into
+one-line summaries, pairs of summaries into one, and so on, so the whole
+history always fits in one screen: recent notes in full, older ones at
+coarser and coarser grain. `zoom` walks back down the tree to the raw notes.
+
+![how OptMem works](anim/optmem.gif)
+
+(Animation from the original project.)
+
 ## Files
 
 ```
@@ -77,9 +118,7 @@ a storage budget: change it whenever, in either direction, and nothing is
 recomputed.
 
 Records are fixed width, so position *is* identity and every lookup is one
-seek. Measured at 100,000 memories on Windows: `wake` 38 ms, `note` 44 ms,
-`recall` 68 ms, `import` of all 100k 117 ms. Process startup is most of
-that.
+seek. Process startup is most of every timing above.
 
 Set `$MEMORY_DIR` to keep `memory/` elsewhere — a synced folder, a git repo.
 

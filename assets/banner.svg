@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300" font-family="ui-monospace,SFMono-Regular,Consolas,monospace">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16110f"/><stop offset="1" stop-color="#2a1610"/></linearGradient>
+<linearGradient id="rust" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb27a"/><stop offset="1" stop-color="#d4501c"/></linearGradient>
+<pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#ffffff" stroke-opacity=".035"/></pattern>
+<filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="960" height="300" rx="18" fill="url(#bg)"/><rect width="960" height="300" rx="18" fill="url(#grid)"/>
+<path d="M65.0 214 C65.0 235 52.5 220 52.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M65.0 214 C65.0 235 77.5 220 77.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M115.0 214 C115.0 235 102.5 220 102.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M115.0 214 C115.0 235 127.5 220 127.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M165.0 214 C165.0 235 152.5 220 152.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M165.0 214 C165.0 235 177.5 220 177.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M215.0 214 C215.0 235 202.5 220 202.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M215.0 214 C215.0 235 227.5 220 227.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M265.0 214 C265.0 235 252.5 220 252.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M265.0 214 C265.0 235 277.5 220 277.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M315.0 214 C315.0 235 302.5 220 302.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M315.0 214 C315.0 235 327.5 220 327.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M365.0 214 C365.0 235 352.5 220 352.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M365.0 214 C365.0 235 377.5 220 377.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M415.0 214 C415.0 235 402.5 220 402.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M415.0 214 C415.0 235 427.5 220 427.5 241" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M90.0 169 C90.0 190 65.0 175 65.0 196" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M90.0 169 C90.0 190 115.0 175 115.0 196" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M190.0 169 C190.0 190 165.0 175 165.0 196" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M190.0 169 C190.0 190 215.0 175 215.0 196" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M290.0 169 C290.0 190 265.0 175 265.0 196" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M290.0 169 C290.0 190 315.0 175 315.0 196" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M390.0 169 C390.0 190 365.0 175 365.0 196" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M390.0 169 C390.0 190 415.0 175 415.0 196" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M140.0 124 C140.0 145 90.0 130 90.0 151" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M140.0 124 C140.0 145 190.0 130 190.0 151" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M340.0 124 C340.0 145 290.0 130 290.0 151" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M340.0 124 C340.0 145 390.0 130 390.0 151" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M240.0 79 C240.0 100 140.0 85 140.0 106" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<path d="M240.0 79 C240.0 100 340.0 85 340.0 106" fill="none" stroke="#e8743b" stroke-opacity=".45" stroke-width="1.6"/>
+<rect x="44.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.55"/>
+<rect x="69.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.58"/>
+<rect x="94.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.61"/>
+<rect x="119.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.64"/>
+<rect x="144.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.67"/>
+<rect x="169.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.70"/>
+<rect x="194.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.73"/>
+<rect x="219.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.76"/>
+<rect x="244.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.79"/>
+<rect x="269.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.82"/>
+<rect x="294.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.85"/>
+<rect x="319.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.88"/>
+<rect x="344.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.91"/>
+<rect x="369.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.94"/>
+<rect x="394.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="0.97"/>
+<rect x="419.5" y="241" width="16" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="52.0" y="196" width="26" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="102.0" y="196" width="26" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="152.0" y="196" width="26" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="202.0" y="196" width="26" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="252.0" y="196" width="26" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="302.0" y="196" width="26" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="352.0" y="196" width="26" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="402.0" y="196" width="26" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="70.0" y="151" width="40" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="170.0" y="151" width="40" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="270.0" y="151" width="40" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="370.0" y="151" width="40" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="110.0" y="106" width="60" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="310.0" y="106" width="60" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<rect x="192.0" y="61" width="96" height="18" rx="5" fill="url(#rust)" fill-opacity="1.00"/>
+<text x="240.0" y="75" text-anchor="middle" font-size="12" font-weight="700" fill="#2a1208">#0-15</text>
+<text x="40" y="285" font-size="12" fill="#c9a08a" fill-opacity=".8">16 notes &#8594; 8 &#8594; 4 &#8594; 2 &#8594; 1 line. Position is identity: every lookup is one seek.</text>
+<text x="500" y="92" font-size="56" font-weight="800" fill="#fff4ec" letter-spacing="-1">Opt<tspan fill="url(#rust)">Mem</tspan></text>
+<text x="502" y="122" font-size="15" fill="#e8b79c">permanent memory for AI agents</text>
+<text x="502" y="143" font-size="15" fill="#e8b79c">one Rust binary &#183; same files &#183; no runtime</text>
+<rect x="500" y="165" width="300" height="100" rx="10" fill="#0d0907" stroke="#e8743b" stroke-opacity=".35"/>
+<circle cx="516" cy="179" r="4" fill="#ff5f57"/>
+<circle cx="530" cy="179" r="4" fill="#febc2e"/>
+<circle cx="544" cy="179" r="4" fill="#28c840"/>
+<text x="514" y="204" font-size="12.5" fill="#fff4ec"><tspan fill="#e8743b">$ </tspan>memo wake</text>
+<text x="514" y="221" font-size="12.5" fill="#c9a08a"><tspan fill="#e8743b"></tspan>#0-63 [10-05..10-09] who I am&#8230;</text>
+<text x="514" y="238" font-size="12.5" fill="#fff4ec"><tspan fill="#e8743b">$ </tspan>memo note "deploy fixed by #212"</text>
+<text x="514" y="255" font-size="12.5" fill="#7fd18b"><tspan fill="#e8743b"></tspan>Saved as #108.</text>
+<g transform="translate(878 205)" filter="url(#glow)">
+<path d="M-34 6 L-52 -4 M-34 14 L-54 12 M-32 22 L-50 30 M34 6 L52 -4 M34 14 L54 12 M32 22 L50 30" stroke="#d4501c" stroke-width="4" stroke-linecap="round"/>
+<path d="M-26 -6 L-40 -30 M26 -6 L40 -30" stroke="#d4501c" stroke-width="5" stroke-linecap="round"/>
+<path d="M-52 -46 a13 13 0 1 0 22 10 l-10 -4 z" fill="url(#rust)"/><path d="M52 -46 a13 13 0 1 1 -22 10 l10 -4 z" fill="url(#rust)"/>
+<ellipse cx="0" cy="10" rx="38" ry="24" fill="url(#rust)"/>
+<line x1="-9" y1="-12" x2="-11" y2="-24" stroke="#d4501c" stroke-width="3"/><line x1="9" y1="-12" x2="11" y2="-24" stroke="#d4501c" stroke-width="3"/>
+<circle cx="-11" cy="-26" r="5" fill="#fff4ec"/><circle cx="11" cy="-26" r="5" fill="#fff4ec"/><circle cx="-10" cy="-26" r="2.4" fill="#16110f"/><circle cx="12" cy="-26" r="2.4" fill="#16110f"/>
+<path d="M-10 16 Q0 24 10 16" stroke="#2a1208" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+</g>
+</svg>
