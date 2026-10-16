@@ -132,7 +132,9 @@ impl Log {
         let mut buf = vec![0u8; ((hi - lo) * LOG_REC) as usize];
         let n = read_full(&mut self.file, &mut buf, &self.path);
         buf[..n]
-            .chunks_exact(LOG_REC as usize)
+            .as_chunks::<{ LOG_REC as usize }>()
+            .0
+            .iter()
             .zip(lo..)
             .map(|(r, i)| parse(r, i))
             .collect()
@@ -167,7 +169,7 @@ pub fn log_scan(d: &Path, mut f: impl FnMut(u64, Entry)) {
     let mut at = 0;
     loop {
         let n = read_full(&mut file, &mut buf, &p);
-        for r in buf[..n].chunks_exact(LOG_REC as usize) {
+        for r in buf[..n].as_chunks::<{ LOG_REC as usize }>().0 {
             f(at, parse(r, at));
             at += 1;
         }

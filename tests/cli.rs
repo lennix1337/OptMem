@@ -215,12 +215,14 @@ fn a_fresh_user_gets_a_memory_that_works_with_nothing_on_path() {
         asked.out
     );
     let line = order[0].replace("\"<your line>\"", "\"both things\"");
-    let mut shell = if cfg!(windows) {
+    #[cfg(windows)]
+    let mut shell = {
         let mut c = Command::new("cmd");
-        #[cfg(windows)]
         std::os::windows::process::CommandExt::raw_arg(&mut c, format!("/C {line}"));
         c
-    } else {
+    };
+    #[cfg(not(windows))]
+    let mut shell = {
         let mut c = Command::new("sh");
         c.args(["-c", &line]);
         c
