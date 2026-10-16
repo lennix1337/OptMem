@@ -198,7 +198,7 @@ fn a_fresh_user_gets_a_memory_that_works_with_nothing_on_path() {
     let bare = if cfg!(windows) {
         PathBuf::from(std::env::var("SystemRoot").unwrap()).join("System32")
     } else {
-        PathBuf::from("/usr/bin")
+        PathBuf::from("/usr/bin:/bin")
     };
     let note = |text: &str| finish(fresh().env("PATH", &bare).args(["note", text]), None);
     note("the first thing that happened");
