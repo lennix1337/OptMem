@@ -1,0 +1,20 @@
+[package]
+name = "optmem"
+version = "0.2.0"
+edition = "2021"
+description = "Permanent, append-only memory for AI agents"
+license = "MIT"
+repository = "https://github.com/lennix1337/OptMem"
+
+[[bin]]
+name = "memo"
+path = "src/main.rs"
+
+[dependencies]
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+regex = "1"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true

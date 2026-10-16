@@ -1,43 +1,68 @@
 # OptMem
 
-Permanent memory for AI agents. A 426-token prompt, a script, plug and play.
+Permanent memory for AI agents. A short prompt, one small binary, plug and play.
+
+A Rust port of [VictorTaelin/OptMem](https://github.com/VictorTaelin/OptMem).
+It reads and writes the same files, so an existing memory needs no migration.
 
 ![how OptMem works](anim/optmem.gif)
 
 ## Install
 
+Needs a Rust toolchain ([rustup.rs](https://rustup.rs)); on Windows run it from Git Bash.
+
 ```sh
-curl -fsSL https://raw.githubusercontent.com/VictorTaelin/OptMem/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/lennix1337/OptMem/main/install.sh | sh
 ```
 
-It prints a `## Memory` block. Paste that at the top of your agent's
-`AGENTS.md` (or `CLAUDE.md`), and you are done. Run the same line again to
-update.
+It builds `memo` into `~/.optmem` and prints a `## Memory` block. Paste that at
+the top of your agent's `AGENTS.md` (or `CLAUDE.md`), and you are done. Run the
+same line again to update: it only replaces the binary.
 
-The tool lands at `~/.optmem/memo`; put `~/.optmem` on `PATH` to type `memo`.
+Put `~/.optmem` on `PATH` to type `memo`. Once it is the first `memo` on `PATH`,
+every command the tool prints uses a bare `memo`. Until then they name the
+binary by its full path, with forward slashes, so bash, cmd and PowerShell
+all run them.
 
 ## Commands
 
 | | |
 |---|---|
 | `memo wake` | read the memory — the first command of every session |
-| `memo note "..."` | record one memory: one line, up to 280 bytes |
+| `memo note "..."` | record one memory: one line, up to 280 bytes; `memo note -` reads it from stdin |
+| `memo amend <id> "..."` | correct memory #id; wake and recall mark the original as amended |
 | `memo nap` | answer the merges that came due |
-| `memo recall <regex>` | search every memory ever recorded, word for word |
+| `memo recall <regex>...` | search every memory; every regex must match; `--around N` adds neighbours |
 | `memo zoom <lo>-<hi>` | open a tree node into its two halves |
 | `memo forget <lo>-<hi>` | drop a bad summary; the next nap rebuilds it |
+| `memo pin "..."` / `memo unpin <n>` | facts wake always shows first, up to 16 |
+| `memo config [NAME=N]` | show this memory's sizes, or change one |
+| `memo import <file>` | bulk-load `YYYY-MM-DD <text>` lines (bootstrap only) |
 
-Merges arrive one at a time, in the output of `note`. Nothing ever runs in the
-background.
+Merges arrive in the output of `note`. Independent ones (same tree level) come
+in batches of up to 4, answered in one `memo nap 0-1 "..." 2-3 "..."`.
+Nothing ever runs in the background.
+
+What the tool does for you:
+
+- Wake prints summary lines with the days they span: `#0-63 [2026-10-05..10-09] ...`.
+- When a summary is missing and the work owed is small (16 compressions or
+  fewer), wake refuses and hands that work over. When more is owed, as after
+  a bulk import or a `forget`, it wakes anyway and marks the gaps.
+- `note` refuses an exact repeat of any of the last 200 memories, and points
+  out a near repeat.
+- Parallel sessions queue on one lock for up to 30 seconds, then fail with a
+  clear message.
 
 ## Files
 
 ```
 ~/.optmem/
-  memo          the tool: one file of Python 3, no dependencies
+  memo(.exe)    the tool: one static binary
   memory/
     LOG.txt     every memory, one per line, append-only, never edited
     TREE/       the summaries: a cache, rebuildable from the log alone
+    PINS.txt    the pinned facts, written by `memo pin`/`unpin`
     config      the sizes, written by `memo config`
 ```
 
@@ -52,7 +77,9 @@ a storage budget: change it whenever, in either direction, and nothing is
 recomputed.
 
 Records are fixed width, so position *is* identity and every lookup is one
-seek. At a million memories (608 MB), `wake` takes 0.03s.
+seek. Measured at 100,000 memories on Windows: `wake` 38 ms, `note` 44 ms,
+`recall` 68 ms, `import` of all 100k 117 ms. Process startup is most of
+that.
 
 Set `$MEMORY_DIR` to keep `memory/` elsewhere — a synced folder, a git repo.
 
@@ -82,7 +109,11 @@ something new, or something worth keeping happens. That covers a task
 worth real effort, a fact or insight the user teaches you, anything you
 learn about their life (even indirectly), any event of lasting effect.
 
-Do not register redundant memories.
+A note with quotes, `%` or `^` in it goes through stdin: `~/.optmem/memo note -`.
+
+Do not register redundant memories. If an old memory is wrong, correct it
+with `~/.optmem/memo amend <id> "..."`. Facts that must never fade go in
+`~/.optmem/memo pin "..."`.
 
 If `~/.optmem/memo note` asks a compression: do it before your next action.
 
@@ -104,3 +135,13 @@ A subagent is not: it must never run `memo`, because it cannot judge what
 is already known, and its notes would arrive duplicated and incorrectly.
 When you spawn one, write: `You are a subagent. Don't run memo.`
 ```
+
+## Development
+
+```sh
+cargo test        # unit tests + the CLI suite (a synthetic life of 2000 memories)
+cargo clippy --all-targets -- -D warnings
+```
+
+The tests run the real binary against scratch stores, with `MEMORY_DIR`, `HOME`
+and `USERPROFILE` all pointing away from your memory.
