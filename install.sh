@@ -22,12 +22,13 @@ cargo install --quiet --locked --git "$REPO" --root "$TMP" optmem
 mkdir -p "$DIR"
 # Windows will not overwrite a running .exe, but it lets one be renamed.
 [ -e "$DIR/memo$EXE" ] && mv -f "$DIR/memo$EXE" "$DIR/memo.old$EXE"
-mv "$TMP/bin/memo$EXE" "$DIR/memo$EXE"
-rm -f "$DIR/memo.old$EXE" 2>/dev/null || true
 if [ -n "$EXE" ]; then
   # The Python tool's leftovers would shadow memo.exe: bash runs an
-  # extensionless `memo` first, and cmd runs memo.cmd.
+  # extensionless `memo` first, and cmd runs memo.cmd. Remove them while no
+  # memo.exe is in place: MSYS `rm memo` would delete memo.exe as well.
   rm -f "$DIR/memo" "$DIR/memo.cmd" "$DIR/memo.ps1"
 fi
+mv "$TMP/bin/memo$EXE" "$DIR/memo$EXE"
+rm -f "$DIR/memo.old$EXE" 2>/dev/null || true
 
 exec "$DIR/memo$EXE" init
